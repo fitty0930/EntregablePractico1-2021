@@ -1,25 +1,32 @@
 document.addEventListener("DOMContentLoaded", function () {
 
-    let btnbw=document.getElementById("blackwhite");
-    btnbw.addEventListener('click', function(){
+    let btnbw = document.getElementById("blackwhite");
+    btnbw.addEventListener('click', function () {
         blackwhite();
     })
-    let btninvert=document.getElementById("invert");
-    btninvert.addEventListener('click', function(){
+    let btninvert = document.getElementById("invert");
+    btninvert.addEventListener('click', function () {
         invert();
     })
-    let btnsepia=document.getElementById("sepia");
-    btnsepia.addEventListener('click', function(){
+    let btnsepia = document.getElementById("sepia");
+    btnsepia.addEventListener('click', function () {
         sepia();
     })
-    let btnreset=document.getElementById("reset");
-    btnreset.addEventListener('click', function(){
+    let btnreset = document.getElementById("reset");
+    btnreset.addEventListener('click', function () {
         loadPicture();
     })
 
-    let btnsave=document.getElementById("saveimg");
-    btnsave.addEventListener('click', function(){
+    let btnsave = document.getElementById("saveimg");
+    btnsave.addEventListener('click', function () {
         saveImg();
+    })
+
+    let btncontrast = document.getElementById("contrast");
+    btncontrast.addEventListener('click', function () {
+        let contrastvalue=document.getElementById("contrastvalue").value;
+        // console.log(contrastvalue);
+        contrast(contrastvalue);
     })
 
     var canvas = document.getElementById('canvas');
@@ -34,13 +41,13 @@ document.addEventListener("DOMContentLoaded", function () {
         imageObj.onload = function () { // usamos onload porque la carga de la img  puede tardar 
             // es async 
             context.drawImage(imageObj, 0, 0);
-            
+
         }
     };
 
 
 
-    function blackwhite(imageData, pixels, numPixels) {
+    function blackwhite() {
         var imageData = context.getImageData(0, 0, canvas.width, canvas.height);
         var pixels = imageData.data;
         var numPixels = imageData.width * imageData.height;
@@ -100,17 +107,40 @@ document.addEventListener("DOMContentLoaded", function () {
         context.putImageData(imageData, 0, 0);
     };
 
+    function contrast(contrast) {
+        var imageData = context.getImageData(0, 0, canvas.width, canvas.height),
+            pixels = imageData.data,
+            numPixels = imageData.width * imageData.height,
+            factor;
+
+        if (!contrast) { contrast = 100; }
+
+        factor = (259 * (contrast + 255)) / (255 * (259 - contrast));
+
+        for (var i = 0; i < numPixels; i++) {
+            var r = pixels[i * 4];
+            var g = pixels[i * 4 + 1];
+            var b = pixels[i * 4 + 2];
+
+            pixels[i * 4] = factor * (r - 128) + 128;
+            pixels[i * 4 + 1] = factor * (g - 128) + 128;
+            pixels[i * 4 + 2] = factor * (b - 128) + 128;
+        }
+
+        context.putImageData(imageData, 0, 0);
+    };
+
     function saveImg() {
-        var link = window.document.createElement( 'a' ),
+        var link = window.document.createElement('a'),
             url = canvas.toDataURL(),
-            filename = 'screenshot.jpg';
-     
-        link.setAttribute( 'href', url );
-        link.setAttribute( 'download', filename );
+            filename = 'mysimplepaintimage.jpg';
+
+        link.setAttribute('href', url);
+        link.setAttribute('download', filename);
         link.style.visibility = 'hidden';
-        window.document.body.appendChild( link );
+        window.document.body.appendChild(link);
         link.click();
-        window.document.body.removeChild( link );
+        window.document.body.removeChild(link);
     };
 
     loadPicture();
