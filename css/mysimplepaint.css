@@ -3,6 +3,10 @@
     margin: auto;
     font-family: "Arial";
 }
+
+.easyfilters, .hardfilters{
+    text-align: center;
+}
  
 .toolbar{
     width: 100%;
