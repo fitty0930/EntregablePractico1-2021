@@ -5,21 +5,27 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title> Filtros </title>
+    <link rel="stylesheet" href="css/mysimplepaint.css">
 </head>
 <body>
-    <div id="main">
+    <div class="wrapper">
+        <div class="toolbar">
+            <a id="openimg"><img src="images/open-icon.png"></a>
+            <a id="saveimg"><img src="images/save-icon.png"></a>
+            <a id="brush"><img src="images/brush-icon.png"></a>
+            <a id="line"><img src="images/line-icon.png"></a>
+            <a id="rubber"><img src="images/rubber-icon.png"></a>
+            <a id="undo"><img src="images/undo-icon.png"></a>
+        </div>
+        <br>
         <canvas id="canvas" width="800" height="600"></canvas>
     </div>
+    <!-- filtros -->
     <button id="blackwhite"> Blanco y negro </button>
-    <button id="invert"> Invertir </button>
+    <button id="invert"> Negativo </button>
     <button id="sepia"> Sepia </button>
-    <button id="reset"> Reset </button>
-    <button id="saveimg"> Guardar Imagen </button>
-    <div>
-        <input id="contrastvalue" type="number" placeholder="100">
-        <button id="contrast"> Contrastar </button>
-    </div>
+    <button id="reset"> Restaurar </button>
 
-    <script src="mysimplepaint.js"></script>
+    <script src="js/mysimplepaint.js"></script>
 </body>
 </html>

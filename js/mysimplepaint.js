@@ -22,12 +22,6 @@ document.addEventListener("DOMContentLoaded", function () {
         saveImg();
     })
 
-    let btncontrast = document.getElementById("contrast");
-    btncontrast.addEventListener('click', function () {
-        let contrastvalue=document.getElementById("contrastvalue").value;
-        // console.log(contrastvalue);
-        contrast(contrastvalue);
-    })
 
     var canvas = document.getElementById('canvas');
     var context = canvas.getContext('2d');
@@ -37,12 +31,14 @@ document.addEventListener("DOMContentLoaded", function () {
     function loadPicture() {
         var imageObj = new Image();
         imageObj.src = 'images/dontknow.jpg';
+        if (imageObj) {
+            imageObj.onload = function () { // usamos onload porque la carga de la img  puede tardar 
+                // es async 
+                context.drawImage(imageObj, 0, 0);
 
-        imageObj.onload = function () { // usamos onload porque la carga de la img  puede tardar 
-            // es async 
-            context.drawImage(imageObj, 0, 0);
-
+            }
         }
+
     };
 
 
@@ -107,28 +103,6 @@ document.addEventListener("DOMContentLoaded", function () {
         context.putImageData(imageData, 0, 0);
     };
 
-    function contrast(contrast) {
-        var imageData = context.getImageData(0, 0, canvas.width, canvas.height),
-            pixels = imageData.data,
-            numPixels = imageData.width * imageData.height,
-            factor;
-
-        if (!contrast) { contrast = 100; }
-
-        factor = (259 * (contrast + 255)) / (255 * (259 - contrast));
-
-        for (var i = 0; i < numPixels; i++) {
-            var r = pixels[i * 4];
-            var g = pixels[i * 4 + 1];
-            var b = pixels[i * 4 + 2];
-
-            pixels[i * 4] = factor * (r - 128) + 128;
-            pixels[i * 4 + 1] = factor * (g - 128) + 128;
-            pixels[i * 4 + 2] = factor * (b - 128) + 128;
-        }
-
-        context.putImageData(imageData, 0, 0);
-    };
 
     function saveImg() {
         var link = window.document.createElement('a'),
