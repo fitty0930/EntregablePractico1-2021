@@ -9,20 +9,7 @@ document.addEventListener("DOMContentLoaded", function () {
     var loadedimg=false;
     var miimgguardada="";
 
-    // BOTONES
-    let btnbw = document.getElementById("blackwhite");
-    btnbw.addEventListener('click', function () {
-        blackwhite();
-    })
-    let btninvert = document.getElementById("invert");
-    btninvert.addEventListener('click', function () {
-        invert();
-    })
-    let btnsepia = document.getElementById("sepia");
-    btnsepia.addEventListener('click', function () {
-        sepia();
-    })
-
+    // BOTONES DE LA BARRA DE HERRAMIENTAS
     let btnsave = document.getElementById("saveimg");
     btnsave.addEventListener('click', function () {
         saveImg();
@@ -72,6 +59,28 @@ document.addEventListener("DOMContentLoaded", function () {
 
     let inputimg= document.getElementById("inputimg");
     inputimg.addEventListener('change',()=>{mostrarImagenCargada()})
+
+    // BOTONES DE FILTROS
+    let btnbw = document.getElementById("blackwhite");
+    btnbw.addEventListener('click', function () {
+        blackwhite();
+    })
+    let btninvert = document.getElementById("invert");
+    btninvert.addEventListener('click', function () {
+        invert();
+    })
+    let btnsepia = document.getElementById("sepia");
+    btnsepia.addEventListener('click', function () {
+        sepia();
+    })
+
+    let btnbinarization = document.getElementById("binarization");
+    btnbinarization.addEventListener('click', function(){
+        binarization();
+    })
+
+
+    // FUNCIONES DEL PAINT
 
     function draw(){
         canvas.addEventListener('mousemove', drawPaint)
@@ -218,6 +227,26 @@ document.addEventListener("DOMContentLoaded", function () {
         context.putImageData(imageData, 0, 0);
     };
 
+    function binarization(){
+        var imageData = context.getImageData(0, 0, canvas.width, canvas.height);
+        var pixels = imageData.data;
+        var numPixels = imageData.width * imageData.height;
+        let threeshold=180;
+
+        for (var i = 0; i < numPixels; i++) {
+            var r = pixels[i * 4];
+            var g = pixels[i * 4 + 1];
+            var b = pixels[i * 4 + 2];
+
+            r = g = b = r > threeshold ? 255 : 0
+            
+            pixels[i * 4] = r;
+            pixels[i * 4 + 1] = g;
+            pixels[i * 4 + 2] = b;
+        }
+
+        context.putImageData(imageData, 0, 0);
+    }
 
 
 
