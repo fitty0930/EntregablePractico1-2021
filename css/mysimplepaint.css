@@ -49,3 +49,12 @@
     max-width:100%;
     height:auto;
 }
+
+h1{
+    text-align: center;
+}
+
+small{
+    float: right;
+    padding: 10px;
+}

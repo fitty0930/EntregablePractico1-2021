@@ -12,6 +12,8 @@
 </head>
 
 <body>
+    <input hidden type="file" id="inputimg">
+    <h1> My simple paint </h1>
     <div class="wrapper">
         <div class="toolbar">
             <a id="openimg"><img src="images/open-icon.png"></a>
@@ -20,6 +22,7 @@
             <a id="line"><img src="images/line-icon.png"></a>
             <a id="rubber"><img src="images/rubber-icon.png"></a>
             <a id="clear"><img src="images/undo-icon.png"></a>
+            <a id="clearall"><img src="images/clear-icon.png"></a>
         </div>
         <br>
         <canvas id="canvas" width="800" height="600"></canvas>
@@ -30,7 +33,6 @@
             <button class="btn btn-secondary" id="blackwhite"> Blanco y negro </button>
             <button class="btn btn-secondary" id="invert"> Negativo </button>
             <button class="btn btn-secondary" id="sepia"> Sepia </button>
-            <button class="btn btn-secondary" id="reset"> Restaurar </button>
         </div>
         <br>
         <div>
@@ -39,6 +41,9 @@
             </div>
         </div>
     </div>
+    <footer>
+        <small> Realizado por Martin Aguirre </small>
+    </footer>
 
 
     <script src="js/mysimplepaint.js"></script>

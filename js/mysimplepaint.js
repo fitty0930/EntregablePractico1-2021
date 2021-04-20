@@ -7,6 +7,7 @@ document.addEventListener("DOMContentLoaded", function () {
     var rubber = false;
     var brush = false;
     var loadedimg=false;
+    var miimgguardada="";
 
     // BOTONES
     let btnbw = document.getElementById("blackwhite");
@@ -21,10 +22,6 @@ document.addEventListener("DOMContentLoaded", function () {
     btnsepia.addEventListener('click', function () {
         sepia();
     })
-    let btnreset = document.getElementById("reset");
-    btnreset.addEventListener('click', function () {
-        loadPicture();
-    })
 
     let btnsave = document.getElementById("saveimg");
     btnsave.addEventListener('click', function () {
@@ -33,6 +30,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
     let btnclear = document.getElementById("clear");
     btnclear.addEventListener('click', function () {
+        clear();
+    })
+
+    let btnclearall=document.getElementById("clearall");
+    btnclearall.addEventListener('click',()=>{
+        loadedimg=false;
         clear();
     })
 
@@ -61,6 +64,14 @@ document.addEventListener("DOMContentLoaded", function () {
         brush=true;
         
     })
+    
+    let openimg=document.getElementById("openimg")
+    openimg.addEventListener('click',()=>{
+        document.getElementById("inputimg").click();
+    })
+
+    let inputimg= document.getElementById("inputimg");
+    inputimg.addEventListener('change',()=>{mostrarImagenCargada()})
 
     function draw(){
         canvas.addEventListener('mousemove', drawPaint)
@@ -99,16 +110,28 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 
-    function clear() {
-        
+    function clear() {  
         context.clearRect(0, 0, canvas.width, canvas.height);
         if(loadedimg){loadPicture()}
     }
 
     // MANEJO DE IMAGENES
-    function loadPicture() {
+
+    function mostrarImagenCargada(){
+        var archivo = document.getElementById("inputimg").files[0];
+        var reader = new FileReader();
+        if (archivo) {
+          reader.readAsDataURL(archivo );
+          reader.onloadend = function () {
+            miimgguardada=reader.result;
+            loadPicture(reader.result);
+          }
+        }
+    }
+
+    function loadPicture(source) {
         var imageObj = new Image();
-        imageObj.src = 'images/dontknow.jpg';
+        source? imageObj.src = source : imageObj.src=miimgguardada;
         loadedimg=true;
         if (imageObj) {
             imageObj.onload = function () { // usamos onload porque la carga de la img  puede tardar 
