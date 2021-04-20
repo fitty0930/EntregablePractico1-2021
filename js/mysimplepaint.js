@@ -36,20 +36,22 @@ document.addEventListener("DOMContentLoaded", function () {
             context.moveTo(x, y)
             canvas.addEventListener('mousemove', doRubber)
         })
-        canvas.addEventListener('mouseup', () => { ruta = false; rubber=false; })
+        canvas.addEventListener('mouseup', () => { ruta = false; })
 
     })
 
     let btnline = document.getElementById("line")
     btnline.addEventListener('click', () => {
         brush=false;
+        rubber=false;
         draw();
     })
 
     let btnbrush = document.getElementById("brush")
     btnbrush.addEventListener('click', () => {
         brush=true;
-        
+        rubber=false;
+        draw()
     })
     
     let openimg=document.getElementById("openimg")
