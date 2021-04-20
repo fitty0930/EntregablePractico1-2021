@@ -1,5 +1,13 @@
 document.addEventListener("DOMContentLoaded", function () {
 
+    // CANVAS
+    var canvas = document.getElementById('canvas');
+    var context = canvas.getContext('2d');
+    var ruta = false;
+    var rubber = false;
+    var brush = false;
+    var loadedimg=false;
+
     // BOTONES
     let btnbw = document.getElementById("blackwhite");
     btnbw.addEventListener('click', function () {
@@ -44,6 +52,17 @@ document.addEventListener("DOMContentLoaded", function () {
 
     let btnline = document.getElementById("line")
     btnline.addEventListener('click', () => {
+        brush=false;
+        draw();
+    })
+
+    let btnbrush = document.getElementById("brush")
+    btnbrush.addEventListener('click', () => {
+        brush=true;
+        
+    })
+
+    function draw(){
         canvas.addEventListener('mousemove', drawPaint)
         canvas.addEventListener('mousedown', () => {
             ruta = true;
@@ -52,23 +71,17 @@ document.addEventListener("DOMContentLoaded", function () {
             canvas.addEventListener('mousemove', drawPaint)
         })
         canvas.addEventListener('mouseup', () => { ruta = false })
-    })
+    }
 
-    // CANVAS
-    var canvas = document.getElementById('canvas');
-    var context = canvas.getContext('2d');
-
-    context.lineWidth = 1;
-
-    var ruta = false;
-    var rubber = false;
-    var brush = false;
-
+    
     function drawPaint(event) {
         x = event.clientX - canvas.offsetLeft;
         y = event.clientY - canvas.offsetTop;
+        
         if (ruta == true && !rubber) {
             context.lineTo(x, y);
+            brush ? context.lineWidth = 20 : context.lineWidth = 1;
+            context.strokeStyle = 'black';
             context.stroke();
         }
     }
@@ -76,7 +89,7 @@ document.addEventListener("DOMContentLoaded", function () {
     function doRubber(event) {
         x = event.clientX - canvas.offsetLeft;
         y = event.clientY - canvas.offsetTop;
-        if (ruta == true) {
+        if (ruta == true && rubber) {
             context.lineTo(x, y);
             context.strokeStyle = 'white';
             context.lineWidth = 50;
@@ -87,13 +100,16 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
     function clear() {
+        
         context.clearRect(0, 0, canvas.width, canvas.height);
+        if(loadedimg){loadPicture()}
     }
 
     // MANEJO DE IMAGENES
     function loadPicture() {
         var imageObj = new Image();
         imageObj.src = 'images/dontknow.jpg';
+        loadedimg=true;
         if (imageObj) {
             imageObj.onload = function () { // usamos onload porque la carga de la img  puede tardar 
                 // es async 
