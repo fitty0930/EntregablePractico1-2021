@@ -60,6 +60,11 @@ document.addEventListener("DOMContentLoaded", function () {
     let inputimg= document.getElementById("inputimg");
     inputimg.addEventListener('change',()=>{mostrarImagenCargada()})
 
+    let btnfilters=document.getElementById("filters");
+    btnfilters.addEventListener('click', ()=>{
+        document.getElementById("filtersbar").classList.toggle('ocultar')
+    })
+
     // BOTONES DE FILTROS
     let btnbw = document.getElementById("blackwhite");
     btnbw.addEventListener('click', function () {

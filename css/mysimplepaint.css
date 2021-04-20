@@ -4,7 +4,7 @@
     font-family: "Arial";
 }
 
-.easyfilters, .hardfilters{
+.filters{
     text-align: center;
 }
  
@@ -57,4 +57,8 @@ h1{
 small{
     float: right;
     padding: 10px;
+}
+
+.ocultar {
+    display: none;
 }
