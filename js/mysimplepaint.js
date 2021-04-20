@@ -1,5 +1,6 @@
 document.addEventListener("DOMContentLoaded", function () {
 
+    // BOTONES
     let btnbw = document.getElementById("blackwhite");
     btnbw.addEventListener('click', function () {
         blackwhite();
@@ -22,12 +23,74 @@ document.addEventListener("DOMContentLoaded", function () {
         saveImg();
     })
 
+    let btnclear = document.getElementById("clear");
+    btnclear.addEventListener('click', function () {
+        clear();
+    })
 
+    let btnrubber = document.getElementById("rubber")
+    btnrubber.addEventListener('click', () => {
+        rubber = true;
+        canvas.addEventListener('mousemove', doRubber)
+        canvas.addEventListener('mousedown', () => {
+            ruta = true;
+            context.beginPath();
+            context.moveTo(x, y)
+            canvas.addEventListener('mousemove', doRubber)
+        })
+        canvas.addEventListener('mouseup', () => { ruta = false; rubber=false; })
+
+    })
+
+    let btnline = document.getElementById("line")
+    btnline.addEventListener('click', () => {
+        canvas.addEventListener('mousemove', drawPaint)
+        canvas.addEventListener('mousedown', () => {
+            ruta = true;
+            context.beginPath();
+            context.moveTo(x, y)
+            canvas.addEventListener('mousemove', drawPaint)
+        })
+        canvas.addEventListener('mouseup', () => { ruta = false })
+    })
+
+    // CANVAS
     var canvas = document.getElementById('canvas');
     var context = canvas.getContext('2d');
 
+    context.lineWidth = 1;
+
+    var ruta = false;
+    var rubber = false;
+    var brush = false;
+
+    function drawPaint(event) {
+        x = event.clientX - canvas.offsetLeft;
+        y = event.clientY - canvas.offsetTop;
+        if (ruta == true && !rubber) {
+            context.lineTo(x, y);
+            context.stroke();
+        }
+    }
+
+    function doRubber(event) {
+        x = event.clientX - canvas.offsetLeft;
+        y = event.clientY - canvas.offsetTop;
+        if (ruta == true) {
+            context.lineTo(x, y);
+            context.strokeStyle = 'white';
+            context.lineWidth = 50;
+            context.stroke();
+        }
+    }
 
 
+
+    function clear() {
+        context.clearRect(0, 0, canvas.width, canvas.height);
+    }
+
+    // MANEJO DE IMAGENES
     function loadPicture() {
         var imageObj = new Image();
         imageObj.src = 'images/dontknow.jpg';
@@ -41,8 +104,21 @@ document.addEventListener("DOMContentLoaded", function () {
 
     };
 
+    function saveImg() {
+        var link = window.document.createElement('a'),
+            url = canvas.toDataURL(),
+            filename = 'mysimplepaintimage.jpg';
+
+        link.setAttribute('href', url);
+        link.setAttribute('download', filename);
+        link.style.visibility = 'hidden';
+        window.document.body.appendChild(link);
+        link.click();
+        window.document.body.removeChild(link);
+    };
 
 
+    // FILTROS
     function blackwhite() {
         var imageData = context.getImageData(0, 0, canvas.width, canvas.height);
         var pixels = imageData.data;
@@ -104,20 +180,9 @@ document.addEventListener("DOMContentLoaded", function () {
     };
 
 
-    function saveImg() {
-        var link = window.document.createElement('a'),
-            url = canvas.toDataURL(),
-            filename = 'mysimplepaintimage.jpg';
 
-        link.setAttribute('href', url);
-        link.setAttribute('download', filename);
-        link.style.visibility = 'hidden';
-        window.document.body.appendChild(link);
-        link.click();
-        window.document.body.removeChild(link);
-    };
 
-    loadPicture();
+    // loadPicture();
 
 
 })
