@@ -1,13 +1,15 @@
 document.addEventListener("DOMContentLoaded", function () {
 
     // CANVAS
-    var canvas = document.getElementById('canvas');
-    var context = canvas.getContext('2d');
+    const canvas = document.getElementById('canvas');
+    const context = canvas.getContext('2d');
+    var seleccionado=document.getElementById("herramienta");
+    var alerta= document.getElementById("alerta");
     var ruta = false;
     var rubber = false;
     var brush = false;
-    var loadedimg=false;
-    var miimgguardada="";
+    var loadedimg = false;
+    var miimgguardada = "";
 
     // BOTONES DE LA BARRA DE HERRAMIENTAS
     let btnsave = document.getElementById("saveimg");
@@ -20,51 +22,60 @@ document.addEventListener("DOMContentLoaded", function () {
         clear();
     })
 
-    let btnclearall=document.getElementById("clearall");
-    btnclearall.addEventListener('click',()=>{
-        loadedimg=false;
+    let btnclearall = document.getElementById("clearall");
+    btnclearall.addEventListener('click', () => {
+        loadedimg = false;
         clear();
     })
 
     let btnrubber = document.getElementById("rubber")
     btnrubber.addEventListener('click', () => {
+        seleccionado.innerHTML="Goma";
+        alerta.classList.remove('ocultar');
         rubber = true;
         canvas.addEventListener('mousemove', doRubber)
-        canvas.addEventListener('mousedown', () => {
+        canvas.addEventListener('mousedown', (event) => {
             ruta = true;
             context.beginPath();
-            context.moveTo(x, y)
+            context.moveTo(event.offsetX, event.offsetY)
             canvas.addEventListener('mousemove', doRubber)
         })
         canvas.addEventListener('mouseup', () => { ruta = false; })
+        canvas.addEventListener('mouseleave', () => {
+            ruta=false;
+        });
 
     })
 
     let btnline = document.getElementById("line")
     btnline.addEventListener('click', () => {
-        brush=false;
-        rubber=false;
+        seleccionado.innerHTML="Lapiz";
+        alerta.classList.remove('ocultar');
+        brush = false;
+        rubber = false;
         draw();
     })
 
     let btnbrush = document.getElementById("brush")
     btnbrush.addEventListener('click', () => {
-        brush=true;
-        rubber=false;
+        seleccionado.innerHTML="Pincel";
+        alerta.classList.remove('ocultar');
+        brush = true;
+        rubber = false;
         draw()
     })
-    
-    let openimg=document.getElementById("openimg")
-    openimg.addEventListener('click',()=>{
+
+    let openimg = document.getElementById("openimg")
+    openimg.addEventListener('click', () => {
         document.getElementById("inputimg").click();
     })
 
-    let inputimg= document.getElementById("inputimg");
-    inputimg.addEventListener('change',()=>{mostrarImagenCargada()})
+    let inputimg = document.getElementById("inputimg");
+    inputimg.addEventListener('change', () => { mostrarImagenCargada() })
 
-    let btnfilters=document.getElementById("filters");
-    btnfilters.addEventListener('click', ()=>{
-        document.getElementById("filtersbar").classList.toggle('ocultar')
+    let btnfilters = document.getElementById("filters");
+    btnfilters.addEventListener('click', () => {
+        if (loadedimg) { document.getElementById("filtersbar").classList.toggle('ocultar') }
     })
 
     // BOTONES DE FILTROS
@@ -72,50 +83,61 @@ document.addEventListener("DOMContentLoaded", function () {
     btnbw.addEventListener('click', function () {
         blackwhite();
     })
+
     let btninvert = document.getElementById("invert");
     btninvert.addEventListener('click', function () {
         invert();
     })
+
     let btnsepia = document.getElementById("sepia");
     btnsepia.addEventListener('click', function () {
         sepia();
     })
 
     let btnbinarization = document.getElementById("binarization");
-    btnbinarization.addEventListener('click', function(){
+    btnbinarization.addEventListener('click', function () {
         binarization();
+    })
+
+    let btnblur = document.getElementById("blur")
+    btnblur.addEventListener('click', () => {
+        blur();
     })
 
 
     // FUNCIONES DEL PAINT
 
-    function draw(){
-        canvas.addEventListener('mousemove', drawPaint)
-        canvas.addEventListener('mousedown', () => {
+    function draw() {
+        canvas.addEventListener('mousemove', (event)=>{ drawPaint(event)})
+        canvas.addEventListener('mousedown', (event) => {
             ruta = true;
             context.beginPath();
-            context.moveTo(x, y)
-            canvas.addEventListener('mousemove', drawPaint)
+            context.moveTo(event.offsetX, event.offsetY);
         })
         canvas.addEventListener('mouseup', () => { ruta = false })
+        canvas.addEventListener('mouseleave', () => {
+            ruta=false;
+        });
     }
 
-    
-    function drawPaint(event) {
-        x = event.clientX - canvas.offsetLeft;
-        y = event.clientY - canvas.offsetTop;
-        
+
+    function drawPaint(event){
+        x = event.offsetX;
+        y = event.offsetY;
+
         if (ruta == true && !rubber) {
             context.lineTo(x, y);
             brush ? context.lineWidth = 20 : context.lineWidth = 1;
             context.strokeStyle = 'black';
             context.stroke();
+
         }
     }
 
     function doRubber(event) {
-        x = event.clientX - canvas.offsetLeft;
-        y = event.clientY - canvas.offsetTop;
+        x = event.offsetX;
+        y = event.offsetY;
+        
         if (ruta == true && rubber) {
             context.lineTo(x, y);
             context.strokeStyle = 'white';
@@ -126,33 +148,41 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 
-    function clear() {  
+    function clear() {
         context.clearRect(0, 0, canvas.width, canvas.height);
-        if(loadedimg){loadPicture()}
+        if (loadedimg) { loadPicture() }
     }
 
     // MANEJO DE IMAGENES
 
-    function mostrarImagenCargada(){
+    function mostrarImagenCargada() {
         var archivo = document.getElementById("inputimg").files[0];
         var reader = new FileReader();
         if (archivo) {
-          reader.readAsDataURL(archivo );
-          reader.onloadend = function () {
-            miimgguardada=reader.result;
-            loadPicture(reader.result);
-          }
+            reader.readAsDataURL(archivo);
+            reader.onloadend = function () {
+                miimgguardada = reader.result;
+                loadPicture(reader.result);
+            }
         }
     }
 
     function loadPicture(source) {
+        loadedimg = false;
+        clear();
         var imageObj = new Image();
-        source? imageObj.src = source : imageObj.src=miimgguardada;
-        loadedimg=true;
+        source ? imageObj.src = source : imageObj.src = miimgguardada;
+        loadedimg = true;
         if (imageObj) {
             imageObj.onload = function () { // usamos onload porque la carga de la img  puede tardar 
                 // es async 
-                context.drawImage(imageObj, 0, 0);
+                let scale = Math.min(canvas.width / imageObj.width, canvas.height / imageObj.height);
+                let x = (canvas.width / 2) - (imageObj.width / 2) * scale;
+                let y = (canvas.height / 2) - (imageObj.height / 2) * scale;
+                context.drawImage(imageObj, x, y, imageObj.width * scale, imageObj.height * scale);
+                context.drawImage(imageObj, x, y, imageObj.width * scale, imageObj.height * scale);
+                imageData = context.getImageData(0, 0, imageObj.width, imageObj.height);
+                context.putImageData(imageData, 0, 0);
 
             }
         }
@@ -234,11 +264,11 @@ document.addEventListener("DOMContentLoaded", function () {
         context.putImageData(imageData, 0, 0);
     };
 
-    function binarization(){
+    function binarization() {
         var imageData = context.getImageData(0, 0, canvas.width, canvas.height);
         var pixels = imageData.data;
         var numPixels = imageData.width * imageData.height;
-        let threeshold=180;
+        let threeshold = 180;
 
         for (var i = 0; i < numPixels; i++) {
             var r = pixels[i * 4];
@@ -246,7 +276,7 @@ document.addEventListener("DOMContentLoaded", function () {
             var b = pixels[i * 4 + 2];
 
             r = g = b = r > threeshold ? 255 : 0
-            
+
             pixels[i * 4] = r;
             pixels[i * 4 + 1] = g;
             pixels[i * 4 + 2] = b;
@@ -255,9 +285,24 @@ document.addEventListener("DOMContentLoaded", function () {
         context.putImageData(imageData, 0, 0);
     }
 
+    function blur() {
+
+        var imageData = context.getImageData(0, 0, canvas.width, canvas.height);
 
 
-    // loadPicture();
+        const matriz = [
+            [1 / 9, 1 / 9, 1 / 9],
+            [1 / 9, 1 / 9, 1 / 9],
+            [1 / 9, 1 / 9, 1 / 9]
+        ];
+
+        for (let x = 0; x < canvas.width; x++) {
+            for (let y = 0; y < canvas.height; y++) {
+
+            }
+        }
+    }
+
 
 
 })
