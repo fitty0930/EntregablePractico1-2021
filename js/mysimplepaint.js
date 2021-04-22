@@ -104,6 +104,11 @@ document.addEventListener("DOMContentLoaded", function () {
         blur();
     })
 
+    let btnborder=document.getElementById("borderdetection");
+    btnborder.addEventListener('click',()=>{
+        borderDetection();
+    })
+
 
     // FUNCIONES DEL PAINT
 
@@ -266,43 +271,105 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function binarization() {
         var imageData = context.getImageData(0, 0, canvas.width, canvas.height);
-        var pixels = imageData.data;
-        var numPixels = imageData.width * imageData.height;
-        let threeshold = 180;
+        const threeshold = 127;
 
-        for (var i = 0; i < numPixels; i++) {
-            var r = pixels[i * 4];
-            var g = pixels[i * 4 + 1];
-            var b = pixels[i * 4 + 2];
+        for(let x=0; x<canvas.width; x++){
+            for(let y=0; y<canvas.height; y++){
+                let red= imageData.data[getImgPos(x,y)]; 
+                let green = imageData.data[getImgPos(x,y)+1];
+                let blue= imageData.data[getImgPos(x,y)+2];
 
-            r = g = b = r > threeshold ? 255 : 0
+                let promedio=(red+green+blue)/3 
 
-            pixels[i * 4] = r;
-            pixels[i * 4 + 1] = g;
-            pixels[i * 4 + 2] = b;
-        }
+                promedio > threeshold ? promedio=255 : promedio=0
+
+                imageData.data[getImgPos(x,y)] =promedio;
+                imageData.data[getImgPos(x,y)+1]= promedio;
+                imageData.data[getImgPos(x,y)+2] =promedio;
+            }}
 
         context.putImageData(imageData, 0, 0);
     }
 
     function blur() {
-
         var imageData = context.getImageData(0, 0, canvas.width, canvas.height);
-
-
         const matriz = [
             [1 / 9, 1 / 9, 1 / 9],
             [1 / 9, 1 / 9, 1 / 9],
             [1 / 9, 1 / 9, 1 / 9]
         ];
 
-        for (let x = 0; x < canvas.width; x++) {
-            for (let y = 0; y < canvas.height; y++) {
+        for(let x=0; x<canvas.width; x++){
+            for(let y=0; y<canvas.height; y++){
+                // let red= imageData.data[getImgPos(x,y)]; 
+                // let green = imageData.data[getImgPos(x,y)+1];
+                // let blue= imageData.data[getImgPos(x,y)+2];
 
+                let red= Math.floor(imageData.data[getImgPos(x-1,y-1)]* matriz[0][0] + imageData.data[getImgPos(x,y-1)] * matriz[0][1] + imageData.data[getImgPos(x+1,y-1)] * matriz[0][2]
+                + imageData.data[getImgPos(x-1,y)] * matriz[1][0] + imageData.data[getImgPos(x,y)] * matriz[1][1] + imageData.data[getImgPos(x+1,y)] * matriz[1][2]
+                + imageData.data[getImgPos(x-1,y+1)] * matriz[2][0] + imageData.data[getImgPos(x,y+1)] * matriz[2][1] + imageData.data[getImgPos(x+1,y+1)] * matriz[2][2]) 
+
+                let green=Math.floor(Math.floor(imageData.data[getImgPos(x-1,y-1)+1]* matriz[0][0] + imageData.data[getImgPos(x,y-1)+1] * matriz[0][1] + imageData.data[getImgPos(x+1,y-1)+1] * matriz[0][2]
+                + imageData.data[getImgPos(x-1,y)+1] * matriz[1][0] + imageData.data[getImgPos(x,y)+1] * matriz[1][1] + imageData.data[getImgPos(x+1,y)+1] * matriz[1][2]
+                + imageData.data[getImgPos(x-1,y+1)+1] * matriz[2][0] + imageData.data[getImgPos(x,y+1)+1] * matriz[2][1] + imageData.data[getImgPos(x+1,y+1)+1] * matriz[2][2]))
+                
+                let blue=Math.floor(imageData.data[getImgPos(x-1,y-1)+2]* matriz[0][0] + imageData.data[getImgPos(x,y-1)+2] * matriz[0][1] + imageData.data[getImgPos(x+1,y-1)+2] * matriz[0][2]
+                + imageData.data[getImgPos(x-1,y)+2] * matriz[1][0] + imageData.data[getImgPos(x,y)+2] * matriz[1][1] + imageData.data[getImgPos(x+1,y)+2] * matriz[1][2]
+                + imageData.data[getImgPos(x-1,y+1)+2] * matriz[2][0] + imageData.data[getImgPos(x,y+1)+2] * matriz[2][1] + imageData.data[getImgPos(x+1,y+1)+2] * matriz[2][2]) 
+
+                imageData.data[getImgPos(x,y)]=red;
+                imageData.data[getImgPos(x,y)+1] = green;
+                imageData.data[getImgPos(x,y)+2] = blue;
             }
         }
+
+
+        context.putImageData(imageData, 0, 0);
+
+        
     }
 
+    // TBC 
+    function borderDetection() {
+        var imageData = context.getImageData(0, 0, canvas.width, canvas.height);
+        const matriz = [
+            [-1, -1, -1],
+            [-1, 8, -1],
+            [-1, -1, -1]
+        ];
 
+        for(let x=0; x<canvas.width; x++){
+            for(let y=0; y<canvas.height; y++){
+
+                let red= Math.floor(imageData.data[getImgPos(x-1,y-1)]* matriz[0][0] + imageData.data[getImgPos(x,y-1)] * matriz[0][1] + imageData.data[getImgPos(x+1,y-1)] * matriz[0][2]
+                + imageData.data[getImgPos(x-1,y)] * matriz[1][0] + imageData.data[getImgPos(x,y)] * matriz[1][1] + imageData.data[getImgPos(x+1,y)] * matriz[1][2]
+                + imageData.data[getImgPos(x-1,y+1)] * matriz[2][0] + imageData.data[getImgPos(x,y+1)] * matriz[2][1] + imageData.data[getImgPos(x+1,y+1)] * matriz[2][2]) 
+
+                let green=Math.floor(Math.floor(imageData.data[getImgPos(x-1,y-1)+1]* matriz[0][0] + imageData.data[getImgPos(x,y-1)+1] * matriz[0][1] + imageData.data[getImgPos(x+1,y-1)+1] * matriz[0][2]
+                + imageData.data[getImgPos(x-1,y)+1] * matriz[1][0] + imageData.data[getImgPos(x,y)+1] * matriz[1][1] + imageData.data[getImgPos(x+1,y)+1] * matriz[1][2]
+                + imageData.data[getImgPos(x-1,y+1)+1] * matriz[2][0] + imageData.data[getImgPos(x,y+1)+1] * matriz[2][1] + imageData.data[getImgPos(x+1,y+1)+1] * matriz[2][2]))
+                
+                let blue=Math.floor(imageData.data[getImgPos(x-1,y-1)+2]* matriz[0][0] + imageData.data[getImgPos(x,y-1)+2] * matriz[0][1] + imageData.data[getImgPos(x+1,y-1)+2] * matriz[0][2]
+                + imageData.data[getImgPos(x-1,y)+2] * matriz[1][0] + imageData.data[getImgPos(x,y)+2] * matriz[1][1] + imageData.data[getImgPos(x+1,y)+2] * matriz[1][2]
+                + imageData.data[getImgPos(x-1,y+1)+2] * matriz[2][0] + imageData.data[getImgPos(x,y+1)+2] * matriz[2][1] + imageData.data[getImgPos(x+1,y+1)+2] * matriz[2][2]) 
+
+                
+                imageData.data[getImgPos(x,y)]=red;
+                imageData.data[getImgPos(x,y)+1] = green;
+                imageData.data[getImgPos(x,y)+2] = blue;
+            }
+        }
+
+
+        context.putImageData(imageData, 0, 0);
+
+
+    }
+
+    function getImgPos(x,y){
+        let index = (x + y * canvas.width) * 4;
+        return index;
+    }
+    
 
 })
