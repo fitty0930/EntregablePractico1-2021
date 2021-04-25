@@ -367,7 +367,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 let red = imageData.data[getImgPos(x, y)];
                 let green = imageData.data[getImgPos(x, y) + 1];
                 let blue = imageData.data[getImgPos(x, y) + 2];
-                let hsl = transformToHSL(red, green, blue); // TBC
+                let hsl = transformToHSL(red, green, blue);
                 hsl[1] += 0.5; // subo saturation
                 let rgb = transformToRGB(hsl[0], hsl[1], hsl[2])
 
@@ -400,9 +400,7 @@ document.addEventListener("DOMContentLoaded", function () {
             if (lightness <= 0.5) { saturation = diff / (maximo + minimo) } else if (lightness > 0.5) {
                 saturation = diff / (2 - maximo - minimo)
             }
-            // saturation = lightness > 0.5 ? diff / (2 - maximo - minimo) : diff / (maximo + minimo);
 
-            // 6 sale de dividir 360/60 
             if (maximo == red) { hue = ((green - blue) / diff); }
             else if (maximo == green) { hue = ((blue - red) / diff + 2); }
             else if (maximo == blue) { hue = ((red - green) / diff + 4); }
@@ -413,7 +411,7 @@ document.addEventListener("DOMContentLoaded", function () {
         return [hue, saturation, lightness];
     }
 
-    function transformToRGB(hue, saturation, lightness) { // releer 
+    function transformToRGB(hue, saturation, lightness) {
         let red, green, blue;
         let temporary1, temporary2;
         let temp_red, temp_green, temp_blue;
