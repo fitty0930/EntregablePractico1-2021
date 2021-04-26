@@ -5,9 +5,11 @@ document.addEventListener("DOMContentLoaded", function () {
     const context = canvas.getContext('2d');
     var seleccionado = document.getElementById("herramienta");
     var alerta = document.getElementById("alerta");
+    var colourchange=document.getElementById("colourchange")
     var ruta = false;
     var rubber = false;
     var brush = false;
+    var drawcolour='black';
     var loadedimg = false;
     var miimgguardada = "";
 
@@ -32,6 +34,7 @@ document.addEventListener("DOMContentLoaded", function () {
     btnrubber.addEventListener('click', () => {
         seleccionado.innerHTML = "Goma";
         alerta.classList.remove('ocultar');
+        colourchange.classList.add('ocultar')
         rubber = true;
         doRubber();
 
@@ -41,6 +44,7 @@ document.addEventListener("DOMContentLoaded", function () {
     btnline.addEventListener('click', () => {
         seleccionado.innerHTML = "Lapiz";
         alerta.classList.remove('ocultar');
+        colourchange.classList.remove('ocultar');
         brush = false;
         rubber = false;
         draw();
@@ -50,6 +54,7 @@ document.addEventListener("DOMContentLoaded", function () {
     btnbrush.addEventListener('click', () => {
         seleccionado.innerHTML = "Pincel";
         alerta.classList.remove('ocultar');
+        colourchange.classList.remove('ocultar');
         brush = true;
         rubber = false;
         draw()
@@ -67,6 +72,10 @@ document.addEventListener("DOMContentLoaded", function () {
     btnfilters.addEventListener('click', () => {
         if (loadedimg) { document.getElementById("filtersbar").classList.toggle('ocultar') }
     })
+
+    let pencilcolour=document.getElementById("pencilcolour")
+    pencilcolour.addEventListener('change',()=>{ 
+        setColour(pencilcolour.value)})
 
     // BOTONES DE FILTROS
     let btnbw = document.getElementById("blackwhite");
@@ -102,6 +111,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // FUNCIONES DEL PAINT
 
+    function setColour(value){
+        drawcolour=value;
+    }
+
     function draw() {
         canvas.addEventListener('mousemove', (event) => { 
             // x = event.clientX-canvas.offsetLeft;
@@ -112,7 +125,7 @@ document.addEventListener("DOMContentLoaded", function () {
             if (ruta == true && !rubber) {
                 context.lineTo(x, y);
                 brush ? context.lineWidth = 20 : context.lineWidth = 1;
-                context.strokeStyle = 'black';
+                context.strokeStyle = drawcolour;
                 context.stroke();
             }
          })

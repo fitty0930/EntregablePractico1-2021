@@ -14,33 +14,48 @@
 <body>
     <input hidden type="file" id="inputimg">
     <h1> My simple paint </h1>
-    <div class="wrapper">
-        <div class="toolbar">
-            <a id="openimg"><img src="images/open-icon.png"></a>
-            <a id="saveimg"><img src="images/save-icon.png"></a>
-            <a id="brush"><img src="images/brush-icon.png"></a>
-            <a id="line"><img src="images/line-icon.png"></a>
-            <a id="rubber"><img src="images/rubber-icon.png"></a>
-            <a id="clear"><img src="images/undo-icon.png"></a>
-            <a id="clearall"><img src="images/clear-icon.png"></a>
-            <a id="filters"><img src="images/filters-icon.png"></a>
+    <div class="row">
+        <div class="col-md-2">
+            
         </div>
-        <div id="alerta" class="alert alert-dark ocultar" role="alert">
-            <p> Herramienta seleccionada: <span id="herramienta">  </span></p>
+        <div class="col-md-8">
+            <div class="wrapper">
+                <div class="toolbar">
+                    <a id="openimg"><img src="images/open-icon.png"></a>
+                    <a id="saveimg"><img src="images/save-icon.png"></a>
+                    <a id="brush"><img src="images/brush-icon.png"></a>
+                    <a id="line"><img src="images/line-icon.png"></a>
+                    <a id="rubber"><img src="images/rubber-icon.png"></a>
+                    <a id="clear"><img src="images/undo-icon.png"></a>
+                    <a id="clearall"><img src="images/clear-icon.png"></a>
+                    <a id="filters"><img src="images/filters-icon.png"></a>
+                </div>
+                <br>
+                <div id="filtersbar" class="filters ocultar">
+                    <button class="btn btn-secondary" id="blackwhite"> Blanco y negro </button>
+                    <button class="btn btn-secondary" id="invert"> Negativo </button>
+                    <button class="btn btn-secondary" id="sepia"> Sepia </button>
+                    <button class="btn btn-secondary" id="binarization"> Binarización </button>
+                    <button class="btn btn-info" id="blur"> Blur </button>
+                    <button class="btn btn-info" id="saturation"> Saturacion </button>
+                </div>
+                <br>
+                <canvas id="canvas" width="800" height="600"></canvas>
+            </div>
         </div>
-        <br>
-        <div id="filtersbar" class="filters ocultar">
-            <button class="btn btn-secondary" id="blackwhite"> Blanco y negro </button>
-            <button class="btn btn-secondary" id="invert"> Negativo </button>
-            <button class="btn btn-secondary" id="sepia"> Sepia </button>
-            <button class="btn btn-secondary" id="binarization"> Binarización </button>
-            <button class="btn btn-info" id="blur"> Blur </button>
-            <button class="btn btn-info" id="saturation"> Saturacion </button>
+        <div class="col-md-2">
+            <div id="alerta" class="alert alert-dark ocultar position-fixed" role="alert">
+                <p> Herramienta seleccionada: <span id="herramienta"> </span></p>
+                <div id="colourchange" class="ocultar">
+                    <p> Seleccione un color </p>
+                    <input type="color" id="pencilcolour">
+                </div>  
+            </div>
         </div>
-        <br>
-        <canvas id="canvas" width="800" height="600"></canvas>
     </div>
-    <!-- filtros -->
+
+
+
 
     <footer>
         <small> Realizado por Martin Aguirre </small>
