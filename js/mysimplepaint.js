@@ -33,17 +33,7 @@ document.addEventListener("DOMContentLoaded", function () {
         seleccionado.innerHTML = "Goma";
         alerta.classList.remove('ocultar');
         rubber = true;
-        canvas.addEventListener('mousemove', doRubber)
-        canvas.addEventListener('mousedown', (event) => {
-            ruta = true;
-            context.beginPath();
-            context.moveTo(event.offsetX, event.offsetY)
-            canvas.addEventListener('mousemove', doRubber)
-        })
-        canvas.addEventListener('mouseup', () => { ruta = false; })
-        canvas.addEventListener('mouseleave', () => {
-            ruta = false;
-        });
+        doRubber();
 
     })
 
@@ -113,11 +103,27 @@ document.addEventListener("DOMContentLoaded", function () {
     // FUNCIONES DEL PAINT
 
     function draw() {
-        canvas.addEventListener('mousemove', (e) => { drawPaint(e) })
+        canvas.addEventListener('mousemove', (event) => { 
+            // x = event.clientX-canvas.offsetLeft;
+            // y = event.clientY-canvas.offsetTop;
+            x=event.offsetX;
+            y=event.offsetY;
+
+            if (ruta == true && !rubber) {
+                context.lineTo(x, y);
+                brush ? context.lineWidth = 20 : context.lineWidth = 1;
+                context.strokeStyle = 'black';
+                context.stroke();
+            }
+         })
         canvas.addEventListener('mousedown', (event) => {
+            // x = event.clientX-canvas.offsetLeft;
+            // y = event.clientY-canvas.offsetTop;
+            x=event.offsetX;
+            y=event.offsetY;
             ruta = true;
             context.beginPath();
-            context.moveTo(event.offsetX, event.offsetY);
+            context.moveTo(x,y);
         })
         canvas.addEventListener('mouseup', () => { ruta = false })
         canvas.addEventListener('mouseleave', () => {
@@ -126,29 +132,28 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 
-    function drawPaint(e) {
-        x = e.offsetX;
-        y = e.offsetY;
 
-        if (ruta == true && !rubber) {
-            context.lineTo(x, y);
-            brush ? context.lineWidth = 20 : context.lineWidth = 1;
-            context.strokeStyle = 'black';
-            context.stroke();
+    function doRubber() {
+        canvas.addEventListener('mousemove', (event)=>{
+            x = event.offsetX;
+            y = event.offsetY;
 
-        }
-    }
-
-    function doRubber(event) {
-        x = event.offsetX;
-        y = event.offsetY;
-
-        if (ruta == true && rubber) {
-            context.lineTo(x, y);
-            context.strokeStyle = 'white';
-            context.lineWidth = 50;
-            context.stroke();
-        }
+            if (ruta == true && rubber) {
+                context.strokeStyle = 'white';
+                context.lineWidth = 50;
+                context.lineTo(x, y);
+                context.stroke();
+            }
+        })
+        canvas.addEventListener('mousedown', (event) => {
+            ruta = true;
+            context.beginPath();
+            context.moveTo(event.offsetX, event.offsetY)
+        })
+        canvas.addEventListener('mouseup', () => { ruta = false; })
+        canvas.addEventListener('mouseleave', () => {
+            ruta = false;
+        });
     }
 
 
@@ -156,6 +161,7 @@ document.addEventListener("DOMContentLoaded", function () {
     function clear() {
         context.clearRect(0, 0, canvas.width, canvas.height);
         if (loadedimg == true) { loadPicture() }
+        inputimg.value="";
     }
 
     // MANEJO DE IMAGENES
