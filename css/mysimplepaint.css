@@ -26,7 +26,12 @@
 /* Change color on hover */
 .toolbar a:hover {
     background-color: #000;
-  }
+    cursor: pointer;
+}
+
+input:hover{
+    cursor: pointer;
+}
  
 /* Change color on selected icon */
 .selected {
@@ -61,4 +66,16 @@ small{
 
 .ocultar {
     display: none;
+}
+
+.pencil-cursor{
+    cursor:  url('../images/pencil-cursor.cur') 4 12, auto;
+}
+
+.rubber-cursor{
+    cursor:  url('../images/rubber-cursor.cur'), auto;
+}
+
+.brush-cursor{
+    cursor: url('../images/brush-cursor.cur'), auto;
 }

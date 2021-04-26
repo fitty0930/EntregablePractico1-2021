@@ -33,6 +33,9 @@ document.addEventListener("DOMContentLoaded", function () {
     let btnrubber = document.getElementById("rubber")
     btnrubber.addEventListener('click', () => {
         seleccionado.innerHTML = "Goma";
+        canvas.classList.add('rubber-cursor')
+        canvas.classList.remove('pencil-cursor');
+        canvas.classList.remove('brush-cursor');
         alerta.classList.remove('ocultar');
         colourchange.classList.add('ocultar')
         rubber = true;
@@ -43,6 +46,9 @@ document.addEventListener("DOMContentLoaded", function () {
     let btnline = document.getElementById("line")
     btnline.addEventListener('click', () => {
         seleccionado.innerHTML = "Lapiz";
+        canvas.classList.add('pencil-cursor');
+        canvas.classList.remove('rubber-cursor');
+        canvas.classList.remove('brush-cursor');
         alerta.classList.remove('ocultar');
         colourchange.classList.remove('ocultar');
         brush = false;
@@ -53,6 +59,9 @@ document.addEventListener("DOMContentLoaded", function () {
     let btnbrush = document.getElementById("brush")
     btnbrush.addEventListener('click', () => {
         seleccionado.innerHTML = "Pincel";
+        canvas.classList.add('brush-cursor')
+        canvas.classList.remove('pencil-cursor');
+        canvas.classList.remove('rubber-cursor');
         alerta.classList.remove('ocultar');
         colourchange.classList.remove('ocultar');
         brush = true;
