@@ -13,12 +13,20 @@
 
 <body>
     <input hidden type="file" id="inputimg">
-    <h1> My simple paint </h1>
+    <nav class="navbar navbar-dark bg-primary">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="">
+            <img src="images/Paint-logo.png" alt="" width="30" height="24" class="d-inline-block align-text-top">
+            My Simple Paint
+          </a>
+        </div>
+    </nav>
     <div class="row">
         <div class="col-md-2">
             
         </div>
         <div class="col-md-8">
+            <br>
             <div class="wrapper">
                 <div class="toolbar">
                     <a id="openimg"><img src="images/open-icon.png"></a>
@@ -40,10 +48,11 @@
                     <button class="btn btn-info" id="saturation"> Saturacion </button>
                 </div>
                 <br>
-                <canvas id="canvas" width="888" height="600"></canvas>
+                <canvas id="canvas" width="800" height="600"></canvas>
             </div>
         </div>
         <div class="col-md-2">
+            <br>
             <div id="alerta" class="alert alert-dark ocultar position-fixed" role="alert">
                 <p> Herramienta seleccionada: <span id="herramienta"> </span></p>
                 <div id="colourchange" class="ocultar">
@@ -57,8 +66,11 @@
 
 
 
-    <footer>
-        <small> Realizado por Martin Aguirre </small>
+    <footer class="bd-footer bg-light text-center text-sm-start">
+        <div class="footer">
+            <a href="https://github.com/fitty0930">GitHub</a>
+            <p> Realizado por Martin Aguirre </p>
+        </div>
     </footer>
 
 

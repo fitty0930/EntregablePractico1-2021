@@ -5,18 +5,19 @@
 }
 
 .filters{
-    text-align: center;
+    padding-left: 100px;
+    text-align: left;
 }
  
 .toolbar{
-    width: 100%;
+    width: 90%;
     background-color: #2b2929;
     overflow: auto;
 }
  
 .toolbar a {
     float: left;
-    width: 11%;
+    width: 12.5%;
     text-align: center;
     padding: 6px 5px;
     transition: all 0.5s ease;
@@ -78,4 +79,9 @@ small{
 
 .brush-cursor{
     cursor: url('../images/brush-cursor.cur'), auto;
+}
+
+.footer{
+    float: right;
+    padding: 20px;
 }
