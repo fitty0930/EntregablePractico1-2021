@@ -39,7 +39,7 @@ input:hover{
 }
  
 #canvas{
-    width: 100%;
+    /* el problema estaba aca con width: 100% */
     border: 3px solid #000000;
 }
  
@@ -69,7 +69,7 @@ small{
 }
 
 .pencil-cursor{
-    cursor:  url('../images/pencil-cursor.cur') 4 12, auto;
+    cursor:  url('../images/pencil-cursor.cur') , auto;
 }
 
 .rubber-cursor{

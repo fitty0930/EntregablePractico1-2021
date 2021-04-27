@@ -124,53 +124,55 @@ document.addEventListener("DOMContentLoaded", function () {
         drawcolour=value;
     }
 
-    function draw() {
-        canvas.addEventListener('mousemove', (event) => { 
-            // x = event.clientX-canvas.offsetLeft;
-            // y = event.clientY-canvas.offsetTop;
-            x=event.offsetX;
-            y=event.offsetY;
+    function drawing(event){
+        var rect = canvas.getBoundingClientRect();
+        x=Math.round(event.clientX-rect.left)
+        y=Math.round(event.clientY-rect.top)
+        // e.pageX - c.offsetLeft, e.pageY - c.offsetTop
 
-            if (ruta == true && !rubber) {
-                context.lineTo(x, y);
-                brush ? context.lineWidth = 20 : context.lineWidth = 1;
-                context.strokeStyle = drawcolour;
-                context.stroke();
-            }
-         })
-        canvas.addEventListener('mousedown', (event) => {
-            // x = event.clientX-canvas.offsetLeft;
-            // y = event.clientY-canvas.offsetTop;
-            x=event.offsetX;
-            y=event.offsetY;
+        if (ruta == true && !rubber) {
+            context.lineTo(x, y);
+            brush ? context.lineWidth = 20 : context.lineWidth = 1;
+            context.strokeStyle = drawcolour;
+            context.stroke();
+        }
+    }
+
+    function draw() {
+        canvas.addEventListener('mousedown', function(){
             ruta = true;
             context.beginPath();
             context.moveTo(x,y);
+            canvas.addEventListener('mousemove', drawing)
         })
-        canvas.addEventListener('mouseup', () => { ruta = false })
-        canvas.addEventListener('mouseleave', () => {
+        canvas.addEventListener('mousemove', drawing)
+        canvas.addEventListener('mouseup', function(){ ruta = false })
+        canvas.addEventListener('mouseleave', function(){
             ruta = false;
         });
     }
 
+    function erasing(event){
+        var rect = canvas.getBoundingClientRect();
+        x=Math.round(event.clientX-rect.left)
+        y=Math.round(event.clientY-rect.top)
+
+        if (ruta == true && rubber) {
+            context.strokeStyle = 'white';
+            context.lineWidth = 50;
+            context.lineTo(x, y);
+            context.stroke();
+        }
+    }
 
 
     function doRubber() {
-        canvas.addEventListener('mousemove', (event)=>{
-            x = event.offsetX;
-            y = event.offsetY;
-
-            if (ruta == true && rubber) {
-                context.strokeStyle = 'white';
-                context.lineWidth = 50;
-                context.lineTo(x, y);
-                context.stroke();
-            }
-        })
-        canvas.addEventListener('mousedown', (event) => {
+        canvas.addEventListener('mousemove',  erasing)
+        canvas.addEventListener('mousedown', function(){
             ruta = true;
             context.beginPath();
-            context.moveTo(event.offsetX, event.offsetY)
+            context.moveTo(x,y)
+            canvas.addEventListener('mousemove',  erasing)
         })
         canvas.addEventListener('mouseup', () => { ruta = false; })
         canvas.addEventListener('mouseleave', () => {
