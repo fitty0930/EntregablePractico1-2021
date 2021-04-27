@@ -1,0 +1,87 @@
+.wrapper {
+    max-width: 900px;
+    margin: auto;
+    font-family: "Arial";
+}
+
+.filters{
+    padding-left: 100px;
+    text-align: left;
+}
+ 
+.toolbar{
+    width: 90%;
+    background-color: #2b2929;
+    overflow: auto;
+}
+ 
+.toolbar a {
+    float: left;
+    width: 12.5%;
+    text-align: center;
+    padding: 6px 5px;
+    transition: all 0.5s ease;
+    color: white;
+}
+
+/* Change color on hover */
+.toolbar a:hover {
+    background-color: #000;
+    cursor: pointer;
+}
+
+input:hover{
+    cursor: pointer;
+}
+ 
+/* Change color on selected icon */
+.selected {
+    background-color: #000; 
+}
+ 
+#canvas{
+    /* el problema estaba aca con width: 100% */
+    border: 3px solid #000000;
+}
+ 
+#img-data-div{
+    width: 100%;
+    max-width: 900px;
+    height: 200px;
+}
+ 
+/* Resize image to container */
+.toolbar a img{
+    max-width:100%;
+    height:auto;
+}
+
+h1{
+    text-align: center;
+}
+
+small{
+    float: right;
+    padding: 10px;
+}
+
+.ocultar {
+    display: none;
+}
+
+.pencil-cursor{
+    cursor:  url('../images/pencil-cursor.cur') , auto;
+}
+
+.rubber-cursor{
+    cursor:  url('../images/rubber-cursor.cur'), auto;
+}
+
+.brush-cursor{
+    cursor: url('../images/brush-cursor.cur'), auto;
+}
+
+.footer{
+    float: right;
+    padding: 20px;
+}
