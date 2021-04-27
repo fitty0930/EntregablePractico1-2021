@@ -5,11 +5,11 @@ document.addEventListener("DOMContentLoaded", function () {
     const context = canvas.getContext('2d');
     var seleccionado = document.getElementById("herramienta");
     var alerta = document.getElementById("alerta");
-    var colourchange=document.getElementById("colourchange")
+    var colourchange = document.getElementById("colourchange")
     var ruta = false;
     var rubber = false;
     var brush = false;
-    var drawcolour='black';
+    var drawcolour = 'black';
     var loadedimg = false;
     var miimgguardada = "";
 
@@ -82,9 +82,10 @@ document.addEventListener("DOMContentLoaded", function () {
         if (loadedimg) { document.getElementById("filtersbar").classList.toggle('ocultar') }
     })
 
-    let pencilcolour=document.getElementById("pencilcolour")
-    pencilcolour.addEventListener('change',()=>{ 
-        setColour(pencilcolour.value)})
+    let pencilcolour = document.getElementById("pencilcolour")
+    pencilcolour.addEventListener('change', () => {
+        setColour(pencilcolour.value)
+    })
 
     // BOTONES DE FILTROS
     let btnbw = document.getElementById("blackwhite");
@@ -117,17 +118,22 @@ document.addEventListener("DOMContentLoaded", function () {
         saturation();
     })
 
+    let btnbrightness = document.getElementById("brightness")
+    btnbrightness.addEventListener('click', () => {
+        brightness();
+    })
+
 
     // FUNCIONES DEL PAINT
 
-    function setColour(value){
-        drawcolour=value;
+    function setColour(value) {
+        drawcolour = value;
     }
 
-    function drawing(event){
+    function drawing(event) {
         var rect = canvas.getBoundingClientRect();
-        x=Math.round(event.clientX-rect.left)
-        y=Math.round(event.clientY-rect.top)
+        x = Math.round(event.clientX - rect.left)
+        y = Math.round(event.clientY - rect.top)
         // e.pageX - c.offsetLeft, e.pageY - c.offsetTop
 
         if (ruta == true && !rubber) {
@@ -139,23 +145,23 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     function draw() {
-        canvas.addEventListener('mousedown', function(){
+        canvas.addEventListener('mousedown', function () {
             ruta = true;
             context.beginPath();
-            context.moveTo(x,y);
+            context.moveTo(x, y);
             canvas.addEventListener('mousemove', drawing)
         })
         canvas.addEventListener('mousemove', drawing)
-        canvas.addEventListener('mouseup', function(){ ruta = false })
-        canvas.addEventListener('mouseleave', function(){
+        canvas.addEventListener('mouseup', function () { ruta = false })
+        canvas.addEventListener('mouseleave', function () {
             ruta = false;
         });
     }
 
-    function erasing(event){
+    function erasing(event) {
         var rect = canvas.getBoundingClientRect();
-        x=Math.round(event.clientX-rect.left)
-        y=Math.round(event.clientY-rect.top)
+        x = Math.round(event.clientX - rect.left)
+        y = Math.round(event.clientY - rect.top)
 
         if (ruta == true && rubber) {
             context.strokeStyle = 'white';
@@ -167,12 +173,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
     function doRubber() {
-        canvas.addEventListener('mousemove',  erasing)
-        canvas.addEventListener('mousedown', function(){
+        canvas.addEventListener('mousemove', erasing)
+        canvas.addEventListener('mousedown', function () {
             ruta = true;
             context.beginPath();
-            context.moveTo(x,y)
-            canvas.addEventListener('mousemove',  erasing)
+            context.moveTo(x, y)
+            canvas.addEventListener('mousemove', erasing)
         })
         canvas.addEventListener('mouseup', () => { ruta = false; })
         canvas.addEventListener('mouseleave', () => {
@@ -185,7 +191,7 @@ document.addEventListener("DOMContentLoaded", function () {
     function clear() {
         context.clearRect(0, 0, canvas.width, canvas.height);
         if (loadedimg == true) { loadPicture() }
-        inputimg.value="";
+        inputimg.value = "";
     }
 
     // MANEJO DE IMAGENES
@@ -498,4 +504,29 @@ document.addEventListener("DOMContentLoaded", function () {
 
     }
 
+    function brightness() {
+        var imageData = context.getImageData(0, 0, canvas.width, canvas.height);
+
+        for (let x = 0; x < canvas.width; x++) {
+            for (let y = 0; y < canvas.height; y++) {
+                imageData.data[getImgPos(x, y)] = moreBrightness(imageData.data[getImgPos(x, y)]);
+                imageData.data[getImgPos(x, y) + 1] = moreBrightness(imageData.data[getImgPos(x, y) + 1]);
+                imageData.data[getImgPos(x, y) + 2] = moreBrightness(imageData.data[getImgPos(x, y) + 2]);
+            }
+        }
+
+        context.putImageData(imageData, 0, 0);
+    }
+
+    function moreBrightness(entrada) {
+        const brillo = 30;
+        let salida = entrada + brillo;
+
+        if (salida > 255) {
+            return 255;
+        }
+        else {
+            return salida;
+        }
+    }
 })
